@@ -47,7 +47,7 @@ public class ToolStore implements Checkout {
 		}
 		Tool toolToRent = this.tools.get(toolCode);
 		if (toolToRent == null) {
-			throw new InvalidToolException(String.format(TOOL_DOES_NOT_EXIST_EXCEPTION_MESSAGE, toolCode));
+			throw new ToolDoesNotExistException(String.format(TOOL_DOES_NOT_EXIST_EXCEPTION_MESSAGE, toolCode));
 		}
 		ToolType toolType = toolToRent.getType();
 		if (toolType == null) {
@@ -61,7 +61,7 @@ public class ToolStore implements Checkout {
 		DateTimeFormatter datePattern = DateTimeFormatter.ofPattern(DATE_TIME_PATTERN);
 		LocalDate dueLocalDate = LocalDate.parse(checkoutDate, datePattern);
 		for (Integer dayCount = MIN_RENTAL_DAY_COUNT; dayCount <= numRentalDays; dayCount++) {
-			dueLocalDate = dueLocalDate.plusDays(dayCount);
+			dueLocalDate = dueLocalDate.plusDays(1);
 			if (this.isWeekend(dueLocalDate) && !isWeekendCharge)
 				continue;
 			if (!this.isWeekend(dueLocalDate) && !isWeekdayCharge)

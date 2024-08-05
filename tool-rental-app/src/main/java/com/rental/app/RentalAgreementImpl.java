@@ -1,5 +1,7 @@
 package com.rental.app;
 
+import java.util.Objects;
+
 public class RentalAgreementImpl implements RentalAgreement {
 	private String toolCode;
 	private String toolType;
@@ -129,6 +131,31 @@ public class RentalAgreementImpl implements RentalAgreement {
 		builder.append(String.format("Discount Amount: $%d\n", discountAmount));
 		builder.append(String.format("Final Charge: $%d\n", finalCharge));
 		return builder.toString();
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(chargeDays, checkOutDate, dailyRentalCharge, discountAmount, discountPercent, dueDate,
+				finalCharge, preDiscountCharge, rentalDays, toolBrand, toolCode, toolType);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		RentalAgreementImpl other = (RentalAgreementImpl) obj;
+		return Objects.equals(chargeDays, other.chargeDays) && Objects.equals(checkOutDate, other.checkOutDate)
+				&& Objects.equals(dailyRentalCharge, other.dailyRentalCharge)
+				&& Objects.equals(discountAmount, other.discountAmount)
+				&& Objects.equals(discountPercent, other.discountPercent) && Objects.equals(dueDate, other.dueDate)
+				&& Objects.equals(finalCharge, other.finalCharge)
+				&& Objects.equals(preDiscountCharge, other.preDiscountCharge)
+				&& Objects.equals(rentalDays, other.rentalDays) && Objects.equals(toolBrand, other.toolBrand)
+				&& Objects.equals(toolCode, other.toolCode) && Objects.equals(toolType, other.toolType);
 	}
 	
 	
