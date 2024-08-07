@@ -2,14 +2,14 @@ package com.rental.app;
 
 import java.util.Objects;
 
-public class ToolType {
+public class InventoryItemType {
 	private String name;
 	private double dailyCharge;
 	private boolean isWeekendCharge;
 	private boolean isWeekdayCharge;
 	private boolean isHolidayCharge;
 	
-	public ToolType(String name, double dailyCharge, boolean isWeekdayCharge, boolean isWeekendCharge, boolean isHolidayCharge) {
+	public InventoryItemType(String name, double dailyCharge, boolean isWeekdayCharge, boolean isWeekendCharge, boolean isHolidayCharge) {
 		this.name = name;
 		this.dailyCharge = dailyCharge;
 		this.isWeekdayCharge = isWeekdayCharge;
@@ -77,7 +77,7 @@ public class ToolType {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		ToolType other = (ToolType) obj;
+		InventoryItemType other = (InventoryItemType) obj;
 		return Double.doubleToLongBits(dailyCharge) == Double.doubleToLongBits(other.dailyCharge)
 				&& isHolidayCharge == other.isHolidayCharge && isWeekdayCharge == other.isWeekdayCharge
 				&& isWeekendCharge == other.isWeekendCharge && Objects.equals(name, other.name);

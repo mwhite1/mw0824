@@ -2,7 +2,7 @@ package com.rental.app;
 
 import java.util.Objects;
 
-public class RentalAgreementImpl implements RentalAgreement {
+public class ToolRentalAgreement implements RentalAgreement {
 	private String toolCode;
 	private String toolType;
 	private String toolBrand;
@@ -16,7 +16,7 @@ public class RentalAgreementImpl implements RentalAgreement {
 	private Double discountAmount;
 	private Double finalCharge;
 	
-	public RentalAgreementImpl(String toolCode, String toolType, String toolBrand, Integer rentalDays, String checkOutDate,
+	public ToolRentalAgreement(String toolCode, String toolType, String toolBrand, Integer rentalDays, String checkOutDate,
 			String dueDate, Double dailyRentalCharge, Integer chargeDays, Double preDiscountCharge,
 			Integer discountPercent, Double discountAmount, Double finalCharge) {
 		this.toolCode = toolCode;
@@ -147,7 +147,7 @@ public class RentalAgreementImpl implements RentalAgreement {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		RentalAgreementImpl other = (RentalAgreementImpl) obj;
+		ToolRentalAgreement other = (ToolRentalAgreement) obj;
 		return Objects.equals(chargeDays, other.chargeDays) && Objects.equals(checkOutDate, other.checkOutDate)
 				&& Objects.equals(dailyRentalCharge, other.dailyRentalCharge)
 				&& Objects.equals(discountAmount, other.discountAmount)
