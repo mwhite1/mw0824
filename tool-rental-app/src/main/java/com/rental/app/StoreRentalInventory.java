@@ -90,9 +90,15 @@ public class StoreRentalInventory implements RentalInventory {
 	}
 
 	@Override
-	public InventoryItem removeTool(String toolCode) {
+	public InventoryItem removeInventoryItem(String code) {
 		// TODO Auto-generated method stub
-		return items.remove(toolCode);
+		return items.remove(code);
+	}
+
+	@Override
+	public InventoryItem getInventoryItem(String code) {
+		// TODO Auto-generated method stub
+		return items.get(code);
 	}
 
 }
