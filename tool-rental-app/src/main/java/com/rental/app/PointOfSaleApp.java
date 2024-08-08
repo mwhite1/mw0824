@@ -16,9 +16,9 @@ import org.apache.commons.cli.*;
  * Hello world!
  *
  */
-public class PointofSaleApp {
-	private static final String TOOL_FILE_NAME = "tools.json";
-	private static final String TOOL_TYPES_FILE_NAME = "tooltypes.json";
+public class PointOfSaleApp {
+	private static final String TOOL_FILE_NAME = "items.json";
+	private static final String TOOL_TYPES_FILE_NAME = "types.json";
 	private static final String TOOL_TYPE_NAME_KEY = "name";
 	private static final String TOOL_TYPE_DAILY_CHARGE_KEY = "dailyCharge";
 	private static final String TOOL_TYPE_WEEKEND_CHARGE_KEY = "weekendCharge";
@@ -35,7 +35,7 @@ public class PointofSaleApp {
 	public static boolean populateStoreInventory(String toolFileName, String toolTypeFileName, RentalInventory inventory) {
 		ObjectMapper objectMapper = new ObjectMapper();
 		File toolJsonFile = new File(toolFileName);
-		File toolTypesJsonFile = new File(toolFileName);
+		File toolTypesJsonFile = new File(toolTypeFileName);
 		try {
 			HashMap<String, HashMap<String,String>> jsonToolTypes = objectMapper.readValue(toolTypesJsonFile,
 					new TypeReference<HashMap<String, HashMap<String,String>>>() {
