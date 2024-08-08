@@ -13,12 +13,11 @@ public class ListMapRentalInventoryPopulator implements RentalInventoryPopulator
 	private static final String ITEM_CODE_KEY = "code";
 	private static final String ITEM_TYPE_KEY = "type";
 	private static final String ITEM_BRAND_KEY = "brand";
-
 	private List<HashMap<String, String>> itemMapList;
 	private HashMap<String, HashMap<String, String>> typeMap;
 
 	public ListMapRentalInventoryPopulator(List<HashMap<String, String>> itemMapList,
-			HashMap<String, HashMap<String, String>> typeMap) throws IllegalArgumentException {
+			HashMap<String, HashMap<String, String>> typeMap) {
 		if (itemMapList == null)
 			throw new IllegalArgumentException("itemMap cannot be null");
 		if (typeMap == null)
@@ -26,7 +25,6 @@ public class ListMapRentalInventoryPopulator implements RentalInventoryPopulator
 		this.itemMapList = itemMapList;
 		this.typeMap = typeMap;
 	}
-
 
 	private InventoryItemType createInventoryItemType(String name, HashMap<String, String> typeAttrs) {
 		double dailyCharge = Double.parseDouble(typeAttrs.getOrDefault(TYPE_DAILY_CHARGE_KEY, "0.00"));
@@ -37,8 +35,12 @@ public class ListMapRentalInventoryPopulator implements RentalInventoryPopulator
 	}
 
 	@Override
-	public void populateInventory(RentalInventory inventory) throws RentalInventoryPopulatorException, InvalidInventoryItemException {
+	public void populateInventory(RentalInventory inventory)
+			throws RentalInventoryPopulatorException, InvalidInventoryItemException {
 		// TODO Auto-generated method stub
+		if (inventory == null) {
+			throw new IllegalArgumentException("inventory cannot be null");
+		}
 		for (HashMap<String, String> itemMap : itemMapList) {
 			String itemCode = itemMap.get(ITEM_CODE_KEY);
 			if (itemCode == null)
@@ -49,7 +51,7 @@ public class ListMapRentalInventoryPopulator implements RentalInventoryPopulator
 			InventoryItemType inventoryItemType = createInventoryItemType(itemType,
 					typeMap.getOrDefault(itemType, new HashMap<String, String>()));
 			String itemBrand = itemMap.getOrDefault(ITEM_BRAND_KEY, "");
-			inventory.addInventoryItem(itemCode.toLowerCase(), new InventoryItem(itemCode,inventoryItemType,itemBrand));
+			inventory.addInventoryItem(itemCode, new InventoryItem(itemCode, inventoryItemType, itemBrand));
 		}
 	}
 

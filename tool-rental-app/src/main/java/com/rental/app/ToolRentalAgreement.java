@@ -6,19 +6,19 @@ public class ToolRentalAgreement implements RentalAgreement {
 	private String toolCode;
 	private String toolType;
 	private String toolBrand;
-	private Integer rentalDays;
+	private int rentalDays;
 	private String checkOutDate;
 	private String dueDate;
-	private Double dailyRentalCharge;
-	private Integer chargeDays;
-	private Double preDiscountCharge;
-	private Integer discountPercent;
-	private Double discountAmount;
-	private Double finalCharge;
+	private double dailyRentalCharge;
+	private int chargeDays;
+	private double preDiscountCharge;
+	private int discountPercent;
+	private double discountAmount;
+	private double finalCharge;
 	
-	public ToolRentalAgreement(String toolCode, String toolType, String toolBrand, Integer rentalDays, String checkOutDate,
-			String dueDate, Double dailyRentalCharge, Integer chargeDays, Double preDiscountCharge,
-			Integer discountPercent, Double discountAmount, Double finalCharge) {
+	public ToolRentalAgreement(String toolCode, String toolType, String toolBrand, int rentalDays, String checkOutDate,
+			String dueDate, double dailyRentalCharge, int chargeDays, double preDiscountCharge,
+			int discountPercent, double discountAmount, double finalCharge) {
 		this.toolCode = toolCode;
 		this.toolType = toolType;
 		this.toolBrand = toolBrand;
@@ -51,10 +51,10 @@ public class ToolRentalAgreement implements RentalAgreement {
 	public void setToolBrand(String toolBrand) {
 		this.toolBrand = toolBrand;
 	}
-	public Integer getRentalDays() {
+	public int getRentalDays() {
 		return rentalDays;
 	}
-	public void setRentalDays(Integer rentalDays) {
+	public void setRentalDays(int rentalDays) {
 		this.rentalDays = rentalDays;
 	}
 	public String getCheckOutDate() {
@@ -69,40 +69,40 @@ public class ToolRentalAgreement implements RentalAgreement {
 	public void setDueDate(String dueDate) {
 		this.dueDate = dueDate;
 	}
-	public Double getDailyRentalCharge() {
+	public double getDailyRentalCharge() {
 		return dailyRentalCharge;
 	}
-	public void setDailyRentalCharge(Double dailyRentalCharge) {
+	public void setDailyRentalCharge(double dailyRentalCharge) {
 		this.dailyRentalCharge = dailyRentalCharge;
 	}
-	public Integer getChargeDays() {
+	public int getChargeDays() {
 		return chargeDays;
 	}
-	public void setChargeDays(Integer chargeDays) {
+	public void setChargeDays(int chargeDays) {
 		this.chargeDays = chargeDays;
 	}
-	public Double getPreDiscountCharge() {
+	public double getPreDiscountCharge() {
 		return preDiscountCharge;
 	}
-	public void setPreDiscountCharge(Double preDiscountCharge) {
+	public void setPreDiscountCharge(double preDiscountCharge) {
 		this.preDiscountCharge = preDiscountCharge;
 	}
-	public Integer getDiscountPercent() {
+	public int getDiscountPercent() {
 		return discountPercent;
 	}
-	public void setDiscountPercent(Integer discountPercent) {
+	public void setDiscountPercent(int discountPercent) {
 		this.discountPercent = discountPercent;
 	}
-	public Double getDiscountAmount() {
+	public double getDiscountAmount() {
 		return discountAmount;
 	}
-	public void setDiscountAmount(Double discountAmount) {
+	public void setDiscountAmount(double discountAmount) {
 		this.discountAmount = discountAmount;
 	}
-	public Double getFinalCharge() {
+	public double getFinalCharge() {
 		return finalCharge;
 	}
-	public void setFinalCharge(Double finalCharge) {
+	public void setFinalCharge(double finalCharge) {
 		this.finalCharge = finalCharge;
 	}
 	@Override
@@ -124,12 +124,12 @@ public class ToolRentalAgreement implements RentalAgreement {
 		builder.append(String.format("Rental days: %d\n", rentalDays));
 		builder.append(String.format("Checkout date: %s\n", checkOutDate));
 		builder.append(String.format("Due Date: %s\n", dueDate));
-		builder.append(String.format("Daily Rental Charge: $%d\n", dailyRentalCharge));
+		builder.append(String.format("Daily Rental Charge: $%.2f\n", dailyRentalCharge));
 		builder.append(String.format("Charge days: %d\n", chargeDays));
-		builder.append(String.format("Pre Discount Charge: $%d\n", preDiscountCharge));
+		builder.append(String.format("Pre Discount Charge: $%.2f\n", preDiscountCharge));
 		builder.append(String.format("Discount Percent: %d%%\n", discountPercent));
-		builder.append(String.format("Discount Amount: $%d\n", discountAmount));
-		builder.append(String.format("Final Charge: $%d\n", finalCharge));
+		builder.append(String.format("Discount Amount: $%.2f\n", discountAmount));
+		builder.append(String.format("Final Charge: $%.2f\n", finalCharge));
 		return builder.toString();
 	}
 
