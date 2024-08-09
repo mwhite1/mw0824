@@ -17,7 +17,7 @@ public class StoreRentalInventory implements RentalInventory {
 	private static final String INVALID_RENTAL_DAY_EXCEPTION_MESSAGE = "Number of rental days must be greater than or equal to 1";
 	private static final String TOOL_DOES_NOT_EXIST_EXCEPTION_MESSAGE = "Tool with code %s does not exist";
 	private static final String TYPE_IS_NULL_EXCEPTION_MESSAGE = "Tool with code %s does not have valid type";
-	private static final String INVALID_DATE_MESSAGE = "%s is an invalid date";
+	private static final String INVALID_DATE_MESSAGE = "Date must be entered in format %s";
 	private static final String DATE_TIME_PATTERN = "MM/dd/yy";
 	
 	private HashMap<String, InventoryItem> items;
@@ -33,7 +33,7 @@ public class StoreRentalInventory implements RentalInventory {
 			return LocalDate.parse(date, datePattern);
 		}
 		catch(DateTimeParseException e) {
-			throw new RentalInventoryException(String.format(INVALID_DATE_MESSAGE, date));
+			throw new RentalInventoryException(String.format(INVALID_DATE_MESSAGE, DATE_TIME_PATTERN));
 		}
 		
 	}
