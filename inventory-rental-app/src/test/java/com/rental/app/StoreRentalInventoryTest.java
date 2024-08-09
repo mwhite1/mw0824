@@ -150,5 +150,9 @@ public class StoreRentalInventoryTest {
 	public void shouldThrowToolDoesNotExistException() throws RentalInventoryException {
 		storeInventory.createRentalAgreement("TEST", 1, 10, "09/03/15");
 	}
-
+	
+	@Test(expected = RentalInventoryException.class)
+	public void shouldThrowRentalInventoryExceptionForBadDate() throws RentalInventoryException {
+		storeInventory.createRentalAgreement("JAKR", 0, 10, "09/03/155");
+	}
 }

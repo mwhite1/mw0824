@@ -5,6 +5,8 @@ import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.Month;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+
 import org.apache.commons.math3.util.Precision;
 
 public class StoreRentalInventory implements RentalInventory {
@@ -15,10 +17,26 @@ public class StoreRentalInventory implements RentalInventory {
 	private static final String INVALID_RENTAL_DAY_EXCEPTION_MESSAGE = "Number of rental days must be greater than or equal to 1";
 	private static final String TOOL_DOES_NOT_EXIST_EXCEPTION_MESSAGE = "Tool with code %s does not exist";
 	private static final String TYPE_IS_NULL_EXCEPTION_MESSAGE = "Tool with code %s does not have valid type";
+	private static final String INVALID_DATE_MESSAGE = "%s is an invalid date";
 	private static final String DATE_TIME_PATTERN = "MM/dd/yy";
 	
 	private HashMap<String, InventoryItem> items;
 	private RentalAgreementGenerator rentalAgreementGenerator;
+	
+	private static String normalizeCode(String code) {
+		return code == null ? code : code.toLowerCase();
+	}
+	
+	private static LocalDate formatDate(String date) throws RentalInventoryException {
+		DateTimeFormatter datePattern = DateTimeFormatter.ofPattern(DATE_TIME_PATTERN);
+		try {
+			return LocalDate.parse(date, datePattern);
+		}
+		catch(DateTimeParseException e) {
+			throw new RentalInventoryException(String.format(INVALID_DATE_MESSAGE, date));
+		}
+		
+	}
 	
 	public StoreRentalInventory(RentalAgreementGenerator rentalAgreementGenerator) {
 		items = new HashMap<String, InventoryItem>();
@@ -32,7 +50,7 @@ public class StoreRentalInventory implements RentalInventory {
 			return true;
 		return date.getDayOfWeek() == DayOfWeek.MONDAY && month == Month.SEPTEMBER && prevWeekMonth == Month.AUGUST;
 	}
-
+	
 	private boolean isWeekend(LocalDate date) {
 		return date.getDayOfWeek() == DayOfWeek.SATURDAY || date.getDayOfWeek() == DayOfWeek.SUNDAY;
 	}
@@ -47,21 +65,21 @@ public class StoreRentalInventory implements RentalInventory {
 		if (numRentalDays < MIN_RENTAL_DAY_COUNT) {
 			throw new InvalidRentalDayException(INVALID_RENTAL_DAY_EXCEPTION_MESSAGE);
 		}
-		InventoryItem toolToRent = items.get(code);
-		if (toolToRent == null) {
+		InventoryItem itemToRent = getInventoryItem(code);
+		if (itemToRent == null) {
 			throw new ItemDoesNotExistException(String.format(TOOL_DOES_NOT_EXIST_EXCEPTION_MESSAGE, code));
 		}
-		InventoryItemType toolType = toolToRent.getType();
-		if (toolType == null) {
+		InventoryItemType itemType = itemToRent.getType();
+		if (itemType == null) {
 			throw new InvalidInventoryItemException(String.format(TYPE_IS_NULL_EXCEPTION_MESSAGE, code));
 		}
-		boolean isWeekendCharge = toolType.isWeekendCharge();
-		boolean isWeekdayCharge = toolType.isWeekdayCharge();
-		boolean isHolidayCharge = toolType.isHolidayCharge();
-		double dailyCharge = toolType.getDailyCharge();
+		boolean isWeekendCharge = itemType.isWeekendCharge();
+		boolean isWeekdayCharge = itemType.isWeekdayCharge();
+		boolean isHolidayCharge = itemType.isHolidayCharge();
+		double dailyCharge = itemType.getDailyCharge();
 		int chargeDays = 0;
 		DateTimeFormatter datePattern = DateTimeFormatter.ofPattern(DATE_TIME_PATTERN);
-		LocalDate dueLocalDate = LocalDate.parse(checkoutDate, datePattern);
+		LocalDate dueLocalDate = formatDate(checkoutDate);
 		for (int dayCount = MIN_RENTAL_DAY_COUNT; dayCount <= numRentalDays; dayCount++) {
 			dueLocalDate = dueLocalDate.plusDays(1);
 			if (this.isWeekend(dueLocalDate) && !isWeekendCharge)
@@ -76,7 +94,7 @@ public class StoreRentalInventory implements RentalInventory {
 		double preDiscountCharge = Precision.round(dailyCharge * chargeDays, 2);
 		double discountAmount = Precision.round(preDiscountCharge * (discountPercent / 100D), 2);
 		double finalCharge = preDiscountCharge - discountAmount;
-		return rentalAgreementGenerator.generateRentalAgreement(code, toolType.getName(), toolToRent.getBrand(), numRentalDays, checkoutDate, dueDate,
+		return rentalAgreementGenerator.generateRentalAgreement(itemToRent.getCode(),itemType.getName(), itemToRent.getBrand(), numRentalDays, checkoutDate, dueDate,
 				dailyCharge, chargeDays, preDiscountCharge, discountPercent, discountAmount, finalCharge);
 	}
 
@@ -86,19 +104,19 @@ public class StoreRentalInventory implements RentalInventory {
 		if (item == null) {
 			throw new InvalidInventoryItemException("Item is invalid");
 		}
-		items.put(code, item);
+		items.put(normalizeCode(code), item);
 	}
 
 	@Override
 	public InventoryItem removeInventoryItem(String code) {
 		// TODO Auto-generated method stub
-		return items.remove(code);
+		return items.remove(normalizeCode(code));
 	}
 
 	@Override
 	public InventoryItem getInventoryItem(String code) {
 		// TODO Auto-generated method stub
-		return items.get(code);
+		return items.get(normalizeCode(code));
 	}
 
 }

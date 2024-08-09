@@ -5,12 +5,10 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>com.rental.app</groupId>
-  <artifactId>tool-rental-app</artifactId>
+  <artifactId>inventory-rental-app</artifactId>
   <version>1.0-SNAPSHOT</version>
   <packaging>jar</packaging>
-  <name>tool-rental-app</name>
-  <!-- FIXME change it to the project's website -->
-  <url>http://www.example.com</url>
+  <name>inventory-rental-app</name>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -44,6 +42,7 @@
   </dependencies>
   
   <build>
+  	<finalName>point-of-sale</finalName>
     <pluginManagement><!-- lock down plugins versions to avoid using Maven defaults (may be moved to parent pom) -->
       <plugins>
         <!-- clean lifecycle, see https://maven.apache.org/ref/current/maven-core/lifecycles.html#clean_Lifecycle -->
@@ -76,6 +75,7 @@
               </manifest>
             </archive>
           </configuration>
+          
         </plugin>
         <plugin>
           <artifactId>maven-install-plugin</artifactId>

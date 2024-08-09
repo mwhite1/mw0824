@@ -3,6 +3,7 @@ package com.rental.app;
 import java.util.Objects;
 
 public class ToolRentalAgreement implements RentalAgreement {
+	private static final String border = "*************************";
 	private String toolCode;
 	private String toolType;
 	private String toolBrand;
@@ -118,6 +119,7 @@ public class ToolRentalAgreement implements RentalAgreement {
 	public String printRentalAgreement() {
 		// TODO Auto-generated method stub
 		StringBuilder builder = new StringBuilder();
+		builder.append(String.format("%s\n", border));
 		builder.append(String.format("Tool code: %s\n",toolCode));
 		builder.append(String.format("Tool type: %s\n", toolType));
 		builder.append(String.format("Tool brand: %s\n", toolBrand));
@@ -130,6 +132,7 @@ public class ToolRentalAgreement implements RentalAgreement {
 		builder.append(String.format("Discount Percent: %d%%\n", discountPercent));
 		builder.append(String.format("Discount Amount: $%.2f\n", discountAmount));
 		builder.append(String.format("Final Charge: $%.2f\n", finalCharge));
+		builder.append(String.format("%s\n", border));
 		return builder.toString();
 	}
 

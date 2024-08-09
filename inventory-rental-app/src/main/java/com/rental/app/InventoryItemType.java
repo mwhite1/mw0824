@@ -9,6 +9,10 @@ public class InventoryItemType {
 	private boolean isWeekdayCharge;
 	private boolean isHolidayCharge;
 	
+	public InventoryItemType() {
+		
+	}
+	
 	public InventoryItemType(String name, double dailyCharge, boolean isWeekdayCharge, boolean isWeekendCharge, boolean isHolidayCharge) {
 		this.name = name;
 		this.dailyCharge = dailyCharge;
