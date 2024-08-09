@@ -15,7 +15,6 @@ public class PointOfSaleApp {
 	private static final String TOOL_TYPES_FILE_NAME = "types.json";
 	private static final String TOOL_FILE_ARG_DESC = "json file containing tools";
 	private static final String TOOL_TYPE_FILE_ARG_DESC = "json file containing tools";
-	private static final String TOOL_DOES_NOT_EXIST_MESSAGE = "Tool with code %s does not exist";
 	private static final String INVALID_STATE_MESSAGE = "Invalid argument.  Please enter %s or %s";
 	private static final String CHOOSE_STATE_MESSAGE = "Please type %s to generate rental agreement and %s to exit";
 	private static final String TOOL_JSON_FILE_NAME_OPT = "toolJsonFileName";
