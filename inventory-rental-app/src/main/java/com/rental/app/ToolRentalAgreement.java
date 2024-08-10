@@ -2,6 +2,13 @@ package com.rental.app;
 
 import java.util.Objects;
 
+/**
+ * 
+ * Creates rental agreement for tools
+ * 
+ * @author Malcolm White
+ *
+ */
 public class ToolRentalAgreement implements RentalAgreement {
 	private static final String border = "*************************";
 	private String toolCode;
@@ -17,6 +24,21 @@ public class ToolRentalAgreement implements RentalAgreement {
 	private double discountAmount;
 	private double finalCharge;
 	
+	/**
+	 * 
+	 * @param toolCode unique identifier of tool
+	 * @param toolType type of tool
+	 * @param toolBrand tool brand
+	 * @param rentalDays number of days tool will be rented for
+	 * @param checkOutDate date tool is checked out
+	 * @param dueDate date tool is due by
+	 * @param dailyRentalCharge daily charge for tool rental
+	 * @param chargeDays number of days that are charged for rental
+	 * @param preDiscountCharge charge before the discount is applied
+	 * @param discountPercent percent discount provided by clerk
+	 * @param discountAmount discount amount provided by clerk
+	 * @param finalCharge charge once discount has been applied to preDiscountCharge
+	 */
 	public ToolRentalAgreement(String toolCode, String toolType, String toolBrand, int rentalDays, String checkOutDate,
 			String dueDate, double dailyRentalCharge, int chargeDays, double preDiscountCharge,
 			int discountPercent, double discountAmount, double finalCharge) {
@@ -34,75 +56,194 @@ public class ToolRentalAgreement implements RentalAgreement {
 		this.finalCharge = finalCharge;
 	}
 	
+	/**
+	 * 
+	 * @return toolCode
+	 */
 	public String getToolCode() {
 		return toolCode;
 	}
+	
+	/**
+	 * 
+	 * @param toolCode
+	 */
 	public void setToolCode(String toolCode) {
 		this.toolCode = toolCode;
 	}
+	
+	/**
+	 *
+	 * @return toolType
+	 */
 	public String getToolType() {
 		return toolType;
 	}
+	
+	/**
+	 * 
+	 * @param toolType
+	 */
 	public void setToolType(String toolType) {
 		this.toolType = toolType;
 	}
+	
+	/**
+	 * 
+	 * @return toolBrand
+	 */
 	public String getToolBrand() {
 		return toolBrand;
 	}
+	
+	/**
+	 * 
+	 * @param toolBrand
+	 */
 	public void setToolBrand(String toolBrand) {
 		this.toolBrand = toolBrand;
 	}
+	
+	/**
+	 * 
+	 * @return rentalDays
+	 */
 	public int getRentalDays() {
 		return rentalDays;
 	}
+	
+	/**
+	 * 
+	 * @param rentalDays
+	 */
 	public void setRentalDays(int rentalDays) {
 		this.rentalDays = rentalDays;
 	}
+	
+	/**
+	 * 
+	 * @return checkoutDate
+	 */
 	public String getCheckOutDate() {
 		return checkOutDate;
 	}
+	
+	/**
+	 * 
+	 * @param checkOutDate
+	 */
 	public void setCheckOutDate(String checkOutDate) {
 		this.checkOutDate = checkOutDate;
 	}
+	
+	/**
+	 * 
+	 * @return dueDate
+	 */
 	public String getDueDate() {
 		return dueDate;
 	}
+	
+	/**
+	 * 
+	 * @param dueDate
+	 */
 	public void setDueDate(String dueDate) {
 		this.dueDate = dueDate;
 	}
+	
+	/**
+	 * 
+	 * @return dailyRentalCharge
+	 */
 	public double getDailyRentalCharge() {
 		return dailyRentalCharge;
 	}
+	
+	/**
+	 * 
+	 * @param dailyRentalCharge
+	 */
 	public void setDailyRentalCharge(double dailyRentalCharge) {
 		this.dailyRentalCharge = dailyRentalCharge;
 	}
+	
+	/**
+	 * 
+	 * @return chargeDays
+	 */
 	public int getChargeDays() {
 		return chargeDays;
 	}
+	
+	/**
+	 * 
+	 * @param chargeDays
+	 */
 	public void setChargeDays(int chargeDays) {
 		this.chargeDays = chargeDays;
 	}
+	
+	/**
+	 * 
+	 * @return preDiscountCharge
+	 */
 	public double getPreDiscountCharge() {
 		return preDiscountCharge;
 	}
+	
+	/**
+	 * 
+	 * @param preDiscountCharge
+	 */
 	public void setPreDiscountCharge(double preDiscountCharge) {
 		this.preDiscountCharge = preDiscountCharge;
 	}
+	
+	/**
+	 * 
+	 * @return discountPercent
+	 */
 	public int getDiscountPercent() {
 		return discountPercent;
 	}
+	
+	/**
+	 * 
+	 * @param discountPercent
+	 */
 	public void setDiscountPercent(int discountPercent) {
 		this.discountPercent = discountPercent;
 	}
+	
+	/**
+	 * 
+	 * @return discountAmount
+	 */
 	public double getDiscountAmount() {
 		return discountAmount;
 	}
+	
+	/**
+	 * 
+	 * @param discountAmount
+	 */
 	public void setDiscountAmount(double discountAmount) {
 		this.discountAmount = discountAmount;
 	}
+	
+	/**
+	 * 
+	 * @return finalCharge
+	 */
 	public double getFinalCharge() {
 		return finalCharge;
 	}
+	
+	/**
+	 * 
+	 * @param finalCharge
+	 */
 	public void setFinalCharge(double finalCharge) {
 		this.finalCharge = finalCharge;
 	}

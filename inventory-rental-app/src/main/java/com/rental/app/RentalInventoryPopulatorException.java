@@ -1,5 +1,10 @@
 package com.rental.app;
 
+/**
+ * Exception for unexpected behavior with RentalInventoryPopulator objects
+ * @author Malcolm White
+ *
+ */
 public class RentalInventoryPopulatorException extends Exception{
 	/**
 	 * 

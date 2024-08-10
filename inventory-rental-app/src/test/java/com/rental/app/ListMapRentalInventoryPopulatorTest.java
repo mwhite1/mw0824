@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -17,14 +18,14 @@ public class ListMapRentalInventoryPopulatorTest {
 	private static final boolean TEST_HOLIDAY_CHARGE = true;
 	private static final String TEST_BRAND_NAME = "Test Brand";
 	private static final String TEST_ITEM_CODE = "TST";
-	private ArrayList<HashMap<String, String>> items;
-	private HashMap<String, InventoryItemType> types;
+	private ArrayList<Map<String, String>> items;
+	private Map<String, InventoryItemType> types;
 	private InventoryItemType type;
 	private StoreRentalInventory inventory;
 
 	@Before
 	public void setUp() {
-		items = new ArrayList<HashMap<String, String>>();
+		items = new ArrayList<Map<String, String>>();
 		types = new HashMap<String, InventoryItemType>();
 		type = new InventoryItemType(TEST_TYPE_NAME,TEST_DAILY_CHARGE,TEST_WEEKDAY_CHARGE,TEST_WEEKEND_CHARGE,TEST_HOLIDAY_CHARGE);
 		items.add(new HashMap<String, String>());
@@ -41,7 +42,7 @@ public class ListMapRentalInventoryPopulatorTest {
 
 	@Test(expected = IllegalArgumentException.class)
 	public void nullTypeMapListShouldThrowException() {
-		new ListMapRentalInventoryPopulator(new ArrayList<HashMap<String, String>>(), null);
+		new ListMapRentalInventoryPopulator(new ArrayList<Map<String, String>>(), null);
 	}
 
 	@Test(expected = IllegalArgumentException.class)

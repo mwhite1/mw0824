@@ -1,5 +1,10 @@
 package com.rental.app;
 
+/**
+ * Exception indicating that rental day is not a valid value
+ * @author Malcolm White
+ *
+ */
 public class InvalidRentalDayException extends RentalInventoryException {
 	private static final long serialVersionUID = 1L;
 	

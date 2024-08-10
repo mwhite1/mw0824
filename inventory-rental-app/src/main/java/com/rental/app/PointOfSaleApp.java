@@ -7,7 +7,9 @@ import java.util.*;
 import org.apache.commons.cli.*;
 
 /**
- * Hello world!
+ * Command line application class that allows user to generate RentalAgreement objects.
+ * 
+ * @author Malcolm White
  *
  */
 public class PointOfSaleApp {
@@ -21,18 +23,30 @@ public class PointOfSaleApp {
 	private static final String TOOL_TYPE_JSON_FILE_NAME_OPT = "toolTypeJsonFileName";
 	private static final int GENERATE_RENTAL_AGREEMENT_STATE = 1;
 	private static final int EXIT_STATE = 2;
-
+	
+	/**
+	 * Populates inventory object by doing the following
+	 * <pre>
+	 * - deserialize the json files named toolFileName and toolTypeFileName
+	 * - create ListMapRentalInventoryPopulator instance with deserialized objects
+	 * - invoke populateInventory method on created instance to populate inventory object
+	 * </pre> 
+	 * @param toolFileName name of json file holding tools
+	 * @param toolTypeFileName name of json file holding types
+	 * @param inventory inventory object to populate
+	 * @return true if exception has not been caught and false otherwise
+	 */
 	public static boolean populateStoreInventory(String toolFileName, String toolTypeFileName,
 			RentalInventory inventory) {
 		ObjectMapper objectMapper = new ObjectMapper();
 		File toolJsonFile = new File(toolFileName);
 		File toolTypesJsonFile = new File(toolTypeFileName);
 		try {
-			HashMap<String, InventoryItemType> jsonToolTypes = objectMapper.readValue(toolTypesJsonFile,
+			Map<String, InventoryItemType> jsonToolTypes = objectMapper.readValue(toolTypesJsonFile,
 					new TypeReference<HashMap<String, InventoryItemType>>() {
 					});
-			List<HashMap<String, String>> jsonTools = objectMapper.readValue(toolJsonFile,
-					new TypeReference<List<HashMap<String, String>>>() {
+			List<Map<String, String>> jsonTools = objectMapper.readValue(toolJsonFile,
+					new TypeReference<List<Map<String, String>>>() {
 					});
 			ListMapRentalInventoryPopulator inventoryPopulator = new ListMapRentalInventoryPopulator(jsonTools,
 					jsonToolTypes);
@@ -44,6 +58,11 @@ public class PointOfSaleApp {
 		return true;
 	}
 
+	/**
+	 * Prints inventory rental agreement
+	 * @param sc Scanner object used to take user input
+	 * @param inventory RentalInventory object used to print rental agreement
+	 */
 	public static void printRentalAgreement(Scanner sc, RentalInventory inventory) {
 		System.out.println("Enter tool code");
 		String toolCode = sc.next();
@@ -63,6 +82,11 @@ public class PointOfSaleApp {
 		}
 	}
 
+	/**
+	 * Parses command line arguments
+	 * @param args command line arguments
+	 * @return
+	 */
 	public static CommandLine parseArgs(String[] args) {
 		Options options = new Options();
 		Option toolsJsonFileName = Option.builder().longOpt(TOOL_JSON_FILE_NAME_OPT).hasArg().required(false)

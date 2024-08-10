@@ -1,7 +1,15 @@
 package com.rental.app;
 
+/**
+ * Gnerator class that generates ToolRentalAgreement
+ * @author Malcolm White
+ *
+ */
 public class ToolRentalAgreementGenerator implements RentalAgreementGenerator {
 
+	/**
+	 * Generates ToolRentalAgreement object
+	 */
 	@Override
 	public RentalAgreement generateRentalAgreement(String itemCode, String itemType, String itemBrand,
 			Integer rentalDays, String checkOutDate, String dueDate, Double dailyRentalCharge, Integer chargeDays,

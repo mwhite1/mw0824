@@ -1,6 +1,7 @@
 package com.rental.app;
 
 import java.util.HashMap;
+import java.util.Map;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.Month;
@@ -9,18 +10,34 @@ import java.time.format.DateTimeParseException;
 
 import org.apache.commons.math3.util.Precision;
 
+/**
+ * Class that implements RentalInventory inteface.  InventoryItem objects are stored
+ * in internal Map<String, InventoryItem>, items.  See {@link RentalInventory} for 
+ * operations
+ * 
+ * @author Malcolm White
+ *
+ */
 public class StoreRentalInventory implements RentalInventory {
 	private static final int MIN_DISCOUNT_PERCENT = 0;
 	private static final int MAX_DISCOUNT_PERCENT = 100;
 	private static final int MIN_RENTAL_DAY_COUNT = 1;
+	private static final Month HOLIDAY_MONTH = Month.JULY;
 	private static final String DISCOUNT_PERCENT_OUT_OF_RANGE_EXCEPTION_MESSAGE = "Discount percent is out of range.  Please choose value between 0 and 100";
 	private static final String INVALID_RENTAL_DAY_EXCEPTION_MESSAGE = "Number of rental days must be greater than or equal to 1";
-	private static final String TOOL_DOES_NOT_EXIST_EXCEPTION_MESSAGE = "Tool with code %s does not exist";
-	private static final String TYPE_IS_NULL_EXCEPTION_MESSAGE = "Tool with code %s does not have valid type";
+	private static final String ITEM_DOES_NOT_EXIST_EXCEPTION_MESSAGE = "Item with code %s does not exist";
+	private static final String TYPE_IS_NULL_EXCEPTION_MESSAGE = "Item with code %s does not have valid type";
 	private static final String INVALID_DATE_MESSAGE = "Date must be entered in format %s";
 	private static final String DATE_TIME_PATTERN = "MM/dd/yy";
 	
-	private HashMap<String, InventoryItem> items;
+	/**
+	 * Internal Map used to store InventoryItem objects
+	 */
+	private Map<String, InventoryItem> items;
+	
+	/**
+	 * Used by createRentalAgreement to generate RentalAgreement object
+	 */
 	private RentalAgreementGenerator rentalAgreementGenerator;
 	
 	private static String normalizeCode(String code) {
@@ -38,11 +55,21 @@ public class StoreRentalInventory implements RentalInventory {
 		
 	}
 	
+	/**
+	 * 
+	 * @param rentalAgreementGenerator used by createRentalAgreement to 
+	 *        generate RentalAgreement object
+	 */
 	public StoreRentalInventory(RentalAgreementGenerator rentalAgreementGenerator) {
 		items = new HashMap<String, InventoryItem>();
 		this.rentalAgreementGenerator = rentalAgreementGenerator;
 	}
-
+	
+	/**
+	 * Checks if date falls on a holiday.
+	 * @param date date to check
+	 * @return true if falls on holiday and false otherwise
+	 */
 	private boolean isHoliday(LocalDate date) {
 		Month month = date.getMonth();
 		Month prevWeekMonth = date.minusWeeks(1).getMonth();
@@ -51,10 +78,37 @@ public class StoreRentalInventory implements RentalInventory {
 		return date.getDayOfWeek() == DayOfWeek.MONDAY && month == Month.SEPTEMBER && prevWeekMonth == Month.AUGUST;
 	}
 	
+	/**
+	 * Checks if date is weekend
+	 * @param date date to check
+	 * @return true if weekend and false otherwise
+	 */
 	private boolean isWeekend(LocalDate date) {
 		return date.getDayOfWeek() == DayOfWeek.SATURDAY || date.getDayOfWeek() == DayOfWeek.SUNDAY;
 	}
 
+	/**
+	 * Creates rental agreement for InventoryItem identified by code with the
+	 * following information:
+	 * <pre>
+	 * - code: InventoryItem attribute, code.
+	 * - numRentalDays: Number of rental days
+	 * - checkoutDate: Date of Checkout.  Must be in MM/dd/yy format otherwise
+	 *                 RentalInventoryException is thrown
+	 * - dueDate: Date item is due
+	 * - dailyCharge: Daily cost to rent item
+	 * - chargeDays: Number of days to charge for, which is days
+	 *               between checkoutDate and dueDate minus days that
+	 *               are not charged.  This varies by item type
+	 * - preDiscountCharge: chargeDays * dailyCharge
+	 * - discountPercent: Percent discount between 0 and 100.  If outside of range
+	 *                    then DiscountPercentOutOfRangeException is thrown
+	 * - discountAmount: preDiscountCharge * discountPercent
+	 * - finalCharge: preDiscountCharge - discountAmount
+	 * Throws ItemDoesNotExistException if InventoryItem retrieved by code is null
+	 * Throws InvalidInventoryItemException if type object in InventoryItem is null
+	 * </pre>
+	 */
 	@Override
 	public RentalAgreement createRentalAgreement(String code, int numRentalDays, int discountPercent,
 			String checkoutDate) throws RentalInventoryException {
@@ -67,7 +121,7 @@ public class StoreRentalInventory implements RentalInventory {
 		}
 		InventoryItem itemToRent = getInventoryItem(code);
 		if (itemToRent == null) {
-			throw new ItemDoesNotExistException(String.format(TOOL_DOES_NOT_EXIST_EXCEPTION_MESSAGE, code));
+			throw new ItemDoesNotExistException(String.format(ITEM_DOES_NOT_EXIST_EXCEPTION_MESSAGE, code));
 		}
 		InventoryItemType itemType = itemToRent.getType();
 		if (itemType == null) {
