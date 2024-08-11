@@ -7,19 +7,16 @@ import java.time.Month;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class HolidaySerializerTest {
 	private ObjectMapper mapper;
-	
+
 	private static String createJsonAttrName(String attrName) {
 		return String.format("\"%s\":", attrName);
 	}
-	
+
 	private static String generateJsonString(Holiday holiday) {
 		Month month = holiday.getMonth();
 		String monthString = month == null ? "null" : String.format("\"%s\"", month.toString());
@@ -43,12 +40,12 @@ public class HolidaySerializerTest {
 		builder.append("}");
 		return builder.toString();
 	}
-	
+
 	@Before
 	public void setUp() {
 		mapper = new ObjectMapper();
 	}
-	
+
 	@Test
 	public void shouldGenerateSerializedHolidayStringWithNullValues() throws Exception {
 		Holiday testHoliday = new Holiday(null,0,null,0);
@@ -56,7 +53,7 @@ public class HolidaySerializerTest {
 		String actualJsonString = mapper.writeValueAsString(testHoliday).replaceAll("\\s", "");
 		assertEquals(expectedJsonString,actualJsonString);
 	}
-	
+
 	@Test
 	public void shouldGenerateSerializedHolidayString() throws Exception {
 		Holiday testHoliday = new Holiday(Month.DECEMBER,3,DayOfWeek.MONDAY,5);
@@ -64,5 +61,5 @@ public class HolidaySerializerTest {
 		String actualJsonString = mapper.writeValueAsString(testHoliday).replaceAll("\\s", "");
 		assertEquals(expectedJsonString,actualJsonString);
 	}
-	
+
 }

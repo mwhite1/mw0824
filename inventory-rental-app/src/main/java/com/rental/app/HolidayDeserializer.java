@@ -22,11 +22,11 @@ public class HolidayDeserializer extends StdDeserializer<Holiday>{
 		JsonNode attrNode = node.get(attrName.label);
 		return attrNode == null || attrNode.isNull() ? null : attrNode;
 	}
-	
+
 	public HolidayDeserializer() {
 		this(null);
 	}
-	
+
 	public HolidayDeserializer(Class<Holiday> h) {
 		super(h);
 	}
@@ -36,11 +36,11 @@ public class HolidayDeserializer extends StdDeserializer<Holiday>{
 		// TODO Auto-generated method stub
 		JsonNode node = p.getCodec().readTree(p);
 		Object monthNodeValue = getNodeValue(node,HolidayAttrNames.MONTH);
-		Month month = monthNodeValue == null ? null : Month.valueOf((String)((TextNode)monthNodeValue).textValue());
+		Month month = monthNodeValue == null ? null : Month.valueOf(((TextNode)monthNodeValue).textValue());
 		Object dayOfMonthNodeValue = getNodeValue(node,HolidayAttrNames.DAY_OF_MONTH);
 		int dayOfMonth = dayOfMonthNodeValue == null ? 0 : (Integer)((IntNode)dayOfMonthNodeValue).numberValue();
 		Object dayOfWeekNodeValue = getNodeValue(node,HolidayAttrNames.DAY_OF_WEEK);
-		DayOfWeek dayOfWeek = dayOfWeekNodeValue == null ? null : DayOfWeek.valueOf((String)((TextNode)dayOfWeekNodeValue).textValue());
+		DayOfWeek dayOfWeek = dayOfWeekNodeValue == null ? null : DayOfWeek.valueOf(((TextNode)dayOfWeekNodeValue).textValue());
 		Object dayOfWeekOrdinalNodeValue = getNodeValue(node,HolidayAttrNames.DAY_OF_WEEK_ORDINAL);
 		int dayOfWeekOrdinal = dayOfWeekOrdinalNodeValue == null ? 0 : (Integer)((IntNode)dayOfWeekOrdinalNodeValue).numberValue();
 		return new Holiday(month,dayOfMonth,dayOfWeek,dayOfWeekOrdinal);

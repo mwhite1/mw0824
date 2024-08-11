@@ -5,13 +5,13 @@ package com.rental.app;
  * @author Malcolm White
  *
  */
-public class InvalidRentalDayException extends RentalInventoryException {
+public class InvalidRentalDayException extends CheckoutException {
 	private static final long serialVersionUID = 1L;
-	
+
 	public InvalidRentalDayException(String message) {
 		super(message);
 	}
-	
+
 	public InvalidRentalDayException(String message, Throwable cause) {
 		super(message,cause);
 	}

@@ -1,12 +1,12 @@
 package com.rental.app;
 
 /**
- * Interface for generating RentalAgreement objects
+ * Gnerator class that generates ToolRentalAgreement
  * @author Malcolm White
  *
  */
-public interface RentalAgreementGenerator {
-	
+public class RentalAgreementGenerator{
+
 	/**
 	 * Generates RentalAgreement object
 	 * 
@@ -25,7 +25,12 @@ public interface RentalAgreementGenerator {
 	 * @param finalCharge the charge after the discount amount has been subtracted
 	 * @return RentalAgreement object
 	 */
-	public RentalAgreement generateRentalAgreement(String itemCode, String itemType, String itemBrand, Integer rentalDays, String checkOutDate,
-			String dueDate, Double dailyRentalCharge, Integer chargeDays, Double preDiscountCharge,
-			Integer discountPercent, Double discountAmount, Double finalCharge);
+	public RentalAgreement generateRentalAgreement(String itemCode, String itemType, String itemBrand,
+			Integer rentalDays, String checkOutDate, String dueDate, Double dailyRentalCharge, Integer chargeDays,
+			Double preDiscountCharge, Integer discountPercent, Double discountAmount, Double finalCharge) {
+		// TODO Auto-generated method stub
+		return new RentalAgreement(itemCode, itemType, itemBrand, rentalDays, checkOutDate, dueDate,
+				dailyRentalCharge, chargeDays, preDiscountCharge, discountPercent, discountAmount, finalCharge);
+	}
+
 }

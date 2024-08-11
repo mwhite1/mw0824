@@ -17,7 +17,7 @@ public class HolidaySerializer extends StdSerializer<Holiday>{
 	public HolidaySerializer() {
 		this(null);
 	}
-	
+
 	public HolidaySerializer(Class<Holiday> h) {
 		super(h);
 	}
@@ -40,7 +40,7 @@ public class HolidaySerializer extends StdSerializer<Holiday>{
 		gen.writeNumberField(HolidayAttrNames.DAY_OF_WEEK_ORDINAL.label, value.getDayOfWeekOrdinal());
 		gen.writeEndObject();
 	}
-	
-	
-	
+
+
+
 }

@@ -32,7 +32,7 @@ public class ListMapRentalInventoryPopulatorTest {
 		items.get(0).put(InventoryItemAttrNames.CODE.label, TEST_ITEM_CODE);
 		items.get(0).put(InventoryItemAttrNames.BRAND.label, TEST_BRAND_NAME);
 		items.get(0).put(InventoryItemAttrNames.TYPE.label, TEST_TYPE_NAME);
-		inventory = new StoreRentalInventory(new ToolRentalAgreementGenerator());
+		inventory = new StoreRentalInventory();
 	}
 
 	@Test(expected = IllegalArgumentException.class)

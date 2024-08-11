@@ -6,13 +6,13 @@ package com.rental.app;
  * @author Malcolm White
  *
  */
-public class ItemDoesNotExistException extends RentalInventoryException{
+public class ItemDoesNotExistException extends CheckoutException{
 	private static final long serialVersionUID = 1L;
 
 	public ItemDoesNotExistException(String message) {
 		super(message);
 	}
-	
+
 	public ItemDoesNotExistException(String message, Throwable cause) {
 		super(message, cause);
 	}

@@ -1,14 +1,21 @@
 package com.rental.app;
 
 import java.io.File;
-import java.io.IOException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Scanner;
 
-import com.fasterxml.jackson.core.exc.StreamReadException;
+import org.apache.commons.cli.CommandLine;
+import org.apache.commons.cli.CommandLineParser;
+import org.apache.commons.cli.DefaultParser;
+import org.apache.commons.cli.HelpFormatter;
+import org.apache.commons.cli.Option;
+import org.apache.commons.cli.Options;
+import org.apache.commons.cli.ParseException;
+
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.DatabindException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import java.util.*;
-import org.apache.commons.cli.*;
 
 /**
  * Command line application class that allows user to generate RentalAgreement objects.
@@ -50,7 +57,7 @@ public class PointOfSaleApp {
 			return null;
 		}
 	}
-	
+
 	/**
 	 * Populates inventory object by doing the following
 	 * <pre>
@@ -67,15 +74,15 @@ public class PointOfSaleApp {
 			RentalInventory inventory) {
 		File toolJsonFile = new File(toolFileName);
 		File toolTypesJsonFile = new File(toolTypeFileName);
-		
+
 		try {
 			Map<String, InventoryItemType> jsonToolTypes = mapper.readValue(toolTypesJsonFile,
 					new TypeReference<HashMap<String, InventoryItemType>>() {
-					});
+			});
 			List<Map<String, String>> jsonTools = mapper.readValue(toolJsonFile,
 					new TypeReference<List<Map<String, String>>>() {
-					});
-			
+			});
+
 			ListMapRentalInventoryPopulator inventoryPopulator = new ListMapRentalInventoryPopulator(jsonTools,
 					jsonToolTypes);
 			inventoryPopulator.populateInventory(inventory);
@@ -87,11 +94,13 @@ public class PointOfSaleApp {
 	}
 
 	/**
-	 * Prints inventory rental agreement
+	 * Checks out item and prints inventory rental agreement
+	 * 
 	 * @param sc Scanner object used to take user input
+	 * @param checkout checkout object used to checkout item
 	 * @param inventory RentalInventory object used to print rental agreement
 	 */
-	private static void printRentalAgreement(Scanner sc, RentalInventory inventory, List<Holiday> holidays) {
+	private static void checkoutItem(Scanner sc, Checkout checkout, List<Holiday> holidays) {
 		System.out.println("Enter tool code");
 		String toolCode = sc.next();
 		System.out.println("Enter number of rental days");
@@ -102,10 +111,10 @@ public class PointOfSaleApp {
 		String checkoutDate = sc.next();
 		System.out.println();
 		try {
-			RentalAgreement agreement = inventory.createRentalAgreement(toolCode, numRentalDays, discountPercent,
+			RentalAgreement agreement = checkout.createRentalAgreement(toolCode, numRentalDays, discountPercent,
 					checkoutDate, holidays);
 			System.out.println(agreement.printRentalAgreement());
-		} catch (RentalInventoryException e) {
+		} catch (CheckoutException e) {
 			System.out.println(e.getMessage());
 		}
 	}
@@ -148,19 +157,20 @@ public class PointOfSaleApp {
 		String toolJsonFileName = cmd.getOptionValue(TOOL_JSON_FILE_NAME_OPT, TOOL_FILE_NAME);
 		String toolTypeJsonFileName = cmd.getOptionValue(TOOL_TYPE_JSON_FILE_NAME_OPT, TOOL_TYPES_FILE_NAME);
 		String holidaysJsonFileName = cmd.getOptionValue(HOLIDAYS_JSON_FILE_NAME_OPT, HOLIDAYS_FILE_NAME);
-		RentalInventory inventory = new StoreRentalInventory(new ToolRentalAgreementGenerator());
+		RentalInventory inventory = new StoreRentalInventory();
 		List<Holiday> holidays = parseHolidaysFromJson(mapper, holidaysJsonFileName);
 		if(holidays == null)
 			System.exit(1);
 		if (!populateStoreInventory(mapper, toolJsonFileName, toolTypeJsonFileName, inventory))
 			System.exit(1);
+		Checkout checkout = new Checkout(inventory,new RentalAgreementGenerator());
 		Scanner inputScanner = new Scanner(System.in);
 		boolean keepRunning = true;
 		while (keepRunning) {
 			System.out.println(String.format(CHOOSE_STATE_MESSAGE, GENERATE_RENTAL_AGREEMENT_STATE, EXIT_STATE));
 			switch (inputScanner.nextInt()) {
 			case GENERATE_RENTAL_AGREEMENT_STATE:
-				printRentalAgreement(inputScanner, inventory, holidays);
+				checkoutItem(inputScanner, checkout, holidays);
 				break;
 			case EXIT_STATE:
 				System.out.println("Exiting");

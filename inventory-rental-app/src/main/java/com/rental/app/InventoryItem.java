@@ -16,7 +16,7 @@ public class InventoryItem implements Serializable{
 	private String code;
 	private InventoryItemType type;
 	private String brand;
-	
+
 	public InventoryItem(String code, InventoryItemType type, String brand) {
 		this.code = code;
 		this.type = type;

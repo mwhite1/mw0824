@@ -4,20 +4,27 @@ import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.Month;
 
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+public class Holiday {
+	protected Month month;
+	protected int dayOfMonth;
+	protected DayOfWeek dayOfWeek;
+	protected int dayOfWeekOrdinal;
 
-@JsonSerialize(using = HolidaySerializer.class)
-@JsonDeserialize(using = HolidayDeserializer.class)
-public class Holiday extends SpecialDay {
 	public Holiday() {
-		super();
+		month = null;
+		dayOfMonth = 0;
+		dayOfWeek = null;
+		dayOfWeekOrdinal = 0;
 	}
+
 	public Holiday(Month month, int dayOfMonth, DayOfWeek dayOfWeek, int dayOfWeekOrdinal) {
-		super(month,dayOfMonth,dayOfWeek,dayOfWeekOrdinal);
+		this.month = month;
+		this.dayOfMonth = dayOfMonth;
+		this.dayOfWeek = dayOfWeek;
+		this.dayOfWeekOrdinal = dayOfWeekOrdinal;
 	}
-	@Override
-	public boolean isDateSpecial(LocalDate date){
+
+	public boolean isDateHoliday(LocalDate date) {
 		if (month != null) {
 			if (date.getMonth() != month)
 				return false;
@@ -28,4 +35,74 @@ public class Holiday extends SpecialDay {
 		}
 		return false;
 	}
+
+	public Month getMonth() {
+		return month;
+	}
+
+	public void setMonth(Month month) {
+		this.month = month;
+	}
+
+	public int getDayOfMonth() {
+		return dayOfMonth;
+	}
+
+	public void setDayOfMonth(int dayOfMonth) {
+		this.dayOfMonth = dayOfMonth;
+	}
+
+	public DayOfWeek getDayOfWeek() {
+		return dayOfWeek;
+	}
+
+	public void setDayOfWeek(DayOfWeek dayOfWeek) {
+		this.dayOfWeek = dayOfWeek;
+	}
+
+	public int getDayOfWeekOrdinal() {
+		return dayOfWeekOrdinal;
+	}
+
+	public void setDayOfWeekOrdinal(int dayOfWeekOrdinal) {
+		this.dayOfWeekOrdinal = dayOfWeekOrdinal;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + dayOfMonth;
+		result = prime * result + ((dayOfWeek == null) ? 0 : dayOfWeek.hashCode());
+		result = prime * result + dayOfWeekOrdinal;
+		result = prime * result + ((month == null) ? 0 : month.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Holiday other = (Holiday) obj;
+		if (dayOfMonth != other.dayOfMonth)
+			return false;
+		if (dayOfWeek != other.dayOfWeek)
+			return false;
+		if (dayOfWeekOrdinal != other.dayOfWeekOrdinal)
+			return false;
+		if (month != other.month)
+			return false;
+		return true;
+	}
+
+	@Override
+	public String toString() {
+		return "Holiday [month=" + month + ", dayOfMonth=" + dayOfMonth + ", dayOfWeek=" + dayOfWeek
+				+ ", dayOfWeekOrdinal=" + dayOfWeekOrdinal + "]";
+	}
+
 }

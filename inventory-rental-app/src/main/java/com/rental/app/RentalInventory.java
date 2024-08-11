@@ -1,7 +1,5 @@
 package com.rental.app;
 
-import java.util.List;
-
 /**
  * 
  * Class that stores InventoryItem objects. Operations include:
@@ -16,21 +14,7 @@ import java.util.List;
  *
  */
 public interface RentalInventory {
-	/**
-	 * Creates a RentalAgreement for InventoryItem object retrieved by code.
-	 * 
-	 * @param code unique code used to retrieve InventoryItem object to create 
-	 * 			   RentalAgreement for
-	 * @param numRentalDays number of days item is rented for
-	 * @param discountPercent discount percent
-	 * @param checkoutDate date item is checked out
-	 * @param specialDays list of specialDays used to determine if day is charged
-	 * @return RentalAgreement object
-	 * @throws RentalInventoryException
-	 */
-	public RentalAgreement createRentalAgreement(String code, int numRentalDays, int discountPercent,
-			String checkoutDate, List<? extends SpecialDay> specialDays) throws RentalInventoryException;
-	
+
 	/**
 	 * Adds InventoryItem object denoted by item at key denoted by code.  If item is
 	 * null InvalidInventoryItemException is thrown.
@@ -39,15 +23,15 @@ public interface RentalInventory {
 	 * @param item value
 	 * @throws InvalidInventoryItemException
 	 */
-	public void addInventoryItem(String code, InventoryItem item) throws InvalidInventoryItemException;
-	
+	public void addInventoryItem(String code, InventoryItem item);
+
 	/**
 	 * Removes InventoryItem object at key code
 	 * @param code key
 	 * @return removed InventoryItem object. Returns null if it does not exist
 	 */
 	public InventoryItem removeInventoryItem(String code);
-	
+
 	/**
 	 * Retrieves InventoryItem object by key code
 	 * @param code key to retrieve InventoryItem object by

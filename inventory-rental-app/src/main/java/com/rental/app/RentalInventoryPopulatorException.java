@@ -14,7 +14,7 @@ public class RentalInventoryPopulatorException extends Exception{
 	public RentalInventoryPopulatorException(String message) {
 		super(message);
 	}
-	
+
 	public RentalInventoryPopulatorException(String message, Throwable cause) {
 		super(message, cause);
 	}

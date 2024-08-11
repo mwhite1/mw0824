@@ -66,7 +66,7 @@ public class InventoryItemType implements Serializable {
 		this.isWeekendCharge = isWeekendCharge;
 		this.isHolidayCharge = isHolidayCharge;
 	}
-	
+
 	/**
 	 * 
 	 * @return dailyCharge

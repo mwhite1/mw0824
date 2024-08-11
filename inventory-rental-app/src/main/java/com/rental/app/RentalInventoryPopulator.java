@@ -6,7 +6,7 @@ package com.rental.app;
  *
  */
 public interface RentalInventoryPopulator {
-	
+
 	/**
 	 * Populates inner data structure of RentalInventory object
 	 * @param inventory

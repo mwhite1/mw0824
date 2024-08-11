@@ -1,28 +1,21 @@
 package com.rental.app;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import java.time.DayOfWeek;
 import java.time.Month;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 import org.apache.commons.math3.util.Pair;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.fasterxml.jackson.core.JsonFactory;
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class HolidayDeserializerTest {
 	private ObjectMapper mapper;
-	
+
 	private static Holiday generateHoliday(List<Pair<HolidayAttrNames,Object>> attrs) {
 		Holiday holiday = new Holiday();
 		for (Pair<HolidayAttrNames,Object> attr : attrs) {
@@ -42,13 +35,13 @@ public class HolidayDeserializerTest {
 					holiday.setDayOfWeekOrdinal((Integer)val);
 				default:
 					break;
-					
+
 				}
 			}
 		}
 		return holiday;
 	}
-	
+
 	private static String generateHolidayJsonString(List<Pair<HolidayAttrNames,Object>> attrs) {
 		List<String> jsonAttrs = new ArrayList<String>();
 		for (Pair<HolidayAttrNames,Object> attr : attrs) {
@@ -71,19 +64,19 @@ public class HolidayDeserializerTest {
 					valString = String.format("%s", val);
 				default:
 					break;
-					
+
 				}
 			}
 			jsonAttrs.add(String.format("%s:%s", strAttrName,valString));
 		}
 		return String.format("{%s}",String.join(",", jsonAttrs));
 	}
-	
+
 	@Before
 	public void setup() {
 		mapper = new ObjectMapper();
 	}
-	
+
 	@Test
 	public void shouldDeserializeWithNullValues() throws Exception {
 		ArrayList<Pair<HolidayAttrNames,Object>> attrList = new ArrayList<Pair<HolidayAttrNames,Object>>();
@@ -93,7 +86,7 @@ public class HolidayDeserializerTest {
 		Holiday actualHoliday = mapper.readValue(stringToDeserialize, Holiday.class);
 		assertEquals(expectedHoliday,actualHoliday);
 	}
-	
+
 	@Test
 	public void shouldDeserializeWithAllValues() throws Exception {
 		ArrayList<Pair<HolidayAttrNames,Object>> attrList = new ArrayList<Pair<HolidayAttrNames,Object>>();
