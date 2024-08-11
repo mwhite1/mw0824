@@ -15,7 +15,9 @@ import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.json.JsonMapper;
 
 /**
  * Command line application class that allows user to generate RentalAgreement objects.
@@ -153,7 +155,7 @@ public class PointOfSaleApp {
 		if (cmd == null) {
 			System.exit(1);
 		}
-		ObjectMapper mapper = new ObjectMapper();
+		ObjectMapper mapper = JsonMapper.builder().enable(MapperFeature.ACCEPT_CASE_INSENSITIVE_ENUMS).build();
 		String toolJsonFileName = cmd.getOptionValue(TOOL_JSON_FILE_NAME_OPT, TOOL_FILE_NAME);
 		String toolTypeJsonFileName = cmd.getOptionValue(TOOL_TYPE_JSON_FILE_NAME_OPT, TOOL_TYPES_FILE_NAME);
 		String holidaysJsonFileName = cmd.getOptionValue(HOLIDAYS_JSON_FILE_NAME_OPT, HOLIDAYS_FILE_NAME);

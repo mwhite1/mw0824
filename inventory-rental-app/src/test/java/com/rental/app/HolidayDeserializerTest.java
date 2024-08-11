@@ -11,7 +11,9 @@ import org.apache.commons.math3.util.Pair;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.json.JsonMapper;
 
 public class HolidayDeserializerTest {
 	private ObjectMapper mapper;
@@ -52,13 +54,13 @@ public class HolidayDeserializerTest {
 			if(val != null) {
 				switch(attrName) {
 				case MONTH:
-					valString = String.format("\"%s\"", val);
+					valString = String.format("\"%s\"", val.toString().toLowerCase());
 					break;
 				case DAY_OF_MONTH:
 					valString = String.format("%s", val);
 					break;
 				case DAY_OF_WEEK:
-					valString = String.format("\"%s\"", val);
+					valString = String.format("\"%s\"", val.toString().toLowerCase());
 					break;
 				case DAY_OF_WEEK_ORDINAL:
 					valString = String.format("%s", val);
@@ -74,7 +76,7 @@ public class HolidayDeserializerTest {
 
 	@Before
 	public void setup() {
-		mapper = new ObjectMapper();
+		mapper = JsonMapper.builder().enable(MapperFeature.ACCEPT_CASE_INSENSITIVE_ENUMS).build();
 	}
 
 	@Test

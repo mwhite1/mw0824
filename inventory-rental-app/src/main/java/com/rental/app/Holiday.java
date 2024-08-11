@@ -24,14 +24,25 @@ public class Holiday {
 		this.dayOfWeekOrdinal = dayOfWeekOrdinal;
 	}
 
+	protected boolean isOrdinalHoliday(LocalDate date) {
+		if (date.getDayOfWeek() != dayOfWeek || dayOfWeekOrdinal == 0)
+			return false;
+		int endDay = Math.abs(dayOfWeekOrdinal);
+		for (int dayIdx = 1; dayIdx < endDay; dayIdx++) {
+			LocalDate currDate = dayOfWeekOrdinal < 0 ? date.plusWeeks(dayIdx) : date.minusWeeks(dayIdx);
+			if (currDate.getMonth() != month)
+				return false;
+		}
+		return date.plusWeeks(-dayOfWeekOrdinal).getMonth() != month;
+	}
+
 	public boolean isDateHoliday(LocalDate date) {
 		if (month != null) {
 			if (date.getMonth() != month)
 				return false;
 			if (dayOfMonth > 0)
 				return date.getDayOfMonth() == dayOfMonth;
-			if (dayOfWeek != null)
-				return date.getDayOfWeek() == dayOfWeek && date.plusWeeks(-dayOfWeekOrdinal).getMonth() != month;
+			return isOrdinalHoliday(date);
 		}
 		return false;
 	}
