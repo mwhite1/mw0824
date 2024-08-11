@@ -1,6 +1,7 @@
 package com.rental.app;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
@@ -66,16 +67,18 @@ public class StoreRentalInventory implements RentalInventory {
 	}
 	
 	/**
-	 * Checks if date falls on a holiday.
-	 * @param date date to check
-	 * @return true if falls on holiday and false otherwise
+	 * Determines if a date falls on a holiday
+	 * 
+	 * @param date
+	 * @param days
+	 * @return
 	 */
-	private boolean isHoliday(LocalDate date) {
-		Month month = date.getMonth();
-		Month prevWeekMonth = date.minusWeeks(1).getMonth();
-		if (month == Month.JULY && date.getDayOfMonth() == 4)
-			return true;
-		return date.getDayOfWeek() == DayOfWeek.MONDAY && month == Month.SEPTEMBER && prevWeekMonth == Month.AUGUST;
+	private boolean isHoliday(LocalDate date, List<? extends SpecialDay> days) {
+		for(SpecialDay day : days) {
+			if(day.isDateSpecial(date))
+				return true;
+		}
+		return false;
 	}
 	
 	/**
@@ -111,7 +114,7 @@ public class StoreRentalInventory implements RentalInventory {
 	 */
 	@Override
 	public RentalAgreement createRentalAgreement(String code, int numRentalDays, int discountPercent,
-			String checkoutDate) throws RentalInventoryException {
+			String checkoutDate, List<? extends SpecialDay> specialDays) throws RentalInventoryException {
 		// TODO Auto-generated method stub
 		if (discountPercent < MIN_DISCOUNT_PERCENT || discountPercent > MAX_DISCOUNT_PERCENT) {
 			throw new DiscountPercentOutOfRangeException(DISCOUNT_PERCENT_OUT_OF_RANGE_EXCEPTION_MESSAGE);
@@ -140,7 +143,7 @@ public class StoreRentalInventory implements RentalInventory {
 				continue;
 			if (!this.isWeekend(dueLocalDate) && !isWeekdayCharge)
 				continue;
-			if (this.isHoliday(dueLocalDate) && !isHolidayCharge)
+			if (this.isHoliday(dueLocalDate,specialDays) && !isHolidayCharge)
 				continue;
 			chargeDays++;
 		}

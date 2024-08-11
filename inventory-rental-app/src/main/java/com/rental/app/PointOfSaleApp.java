@@ -1,7 +1,11 @@
 package com.rental.app;
 
 import java.io.File;
+import java.io.IOException;
+
+import com.fasterxml.jackson.core.exc.StreamReadException;
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.DatabindException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.*;
 import org.apache.commons.cli.*;
@@ -15,14 +19,37 @@ import org.apache.commons.cli.*;
 public class PointOfSaleApp {
 	private static final String TOOL_FILE_NAME = "items.json";
 	private static final String TOOL_TYPES_FILE_NAME = "types.json";
+	private static final String HOLIDAYS_FILE_NAME = "holidays.json";
 	private static final String TOOL_FILE_ARG_DESC = "json file containing tools";
 	private static final String TOOL_TYPE_FILE_ARG_DESC = "json file containing tools";
 	private static final String INVALID_STATE_MESSAGE = "Invalid argument.  Please enter %s or %s";
 	private static final String CHOOSE_STATE_MESSAGE = "Please type %s to generate rental agreement and %s to exit";
 	private static final String TOOL_JSON_FILE_NAME_OPT = "toolJsonFileName";
 	private static final String TOOL_TYPE_JSON_FILE_NAME_OPT = "toolTypeJsonFileName";
+	private static final String HOLIDAYS_JSON_FILE_NAME_OPT = "holidaysFileName";
+	private static final String HOLIDAYS_FILE_ARG_DESC = "file containing all eligible holidays";
 	private static final int GENERATE_RENTAL_AGREEMENT_STATE = 1;
 	private static final int EXIT_STATE = 2;
+
+	/**
+	 * Parse holiday JSON file into list of Holiday objects
+	 * 
+	 * @param mapper 
+	 * @param holidayFileName
+	 * @return
+	 */
+	private static List<Holiday> parseHolidaysFromJson(ObjectMapper mapper, String holidayFileName) {
+		try {
+			File holidayJsonFile = new File(holidayFileName);
+			List<Holiday> holidays = mapper.readValue(holidayJsonFile, 
+					new TypeReference<List<Holiday>>() {});
+			return holidays;
+		}
+		catch (Exception e) {
+			System.out.println(e.getMessage());
+			return null;
+		}
+	}
 	
 	/**
 	 * Populates inventory object by doing the following
@@ -36,18 +63,19 @@ public class PointOfSaleApp {
 	 * @param inventory inventory object to populate
 	 * @return true if exception has not been caught and false otherwise
 	 */
-	public static boolean populateStoreInventory(String toolFileName, String toolTypeFileName,
+	private static boolean populateStoreInventory(ObjectMapper mapper, String toolFileName, String toolTypeFileName,
 			RentalInventory inventory) {
-		ObjectMapper objectMapper = new ObjectMapper();
 		File toolJsonFile = new File(toolFileName);
 		File toolTypesJsonFile = new File(toolTypeFileName);
+		
 		try {
-			Map<String, InventoryItemType> jsonToolTypes = objectMapper.readValue(toolTypesJsonFile,
+			Map<String, InventoryItemType> jsonToolTypes = mapper.readValue(toolTypesJsonFile,
 					new TypeReference<HashMap<String, InventoryItemType>>() {
 					});
-			List<Map<String, String>> jsonTools = objectMapper.readValue(toolJsonFile,
+			List<Map<String, String>> jsonTools = mapper.readValue(toolJsonFile,
 					new TypeReference<List<Map<String, String>>>() {
 					});
+			
 			ListMapRentalInventoryPopulator inventoryPopulator = new ListMapRentalInventoryPopulator(jsonTools,
 					jsonToolTypes);
 			inventoryPopulator.populateInventory(inventory);
@@ -63,7 +91,7 @@ public class PointOfSaleApp {
 	 * @param sc Scanner object used to take user input
 	 * @param inventory RentalInventory object used to print rental agreement
 	 */
-	public static void printRentalAgreement(Scanner sc, RentalInventory inventory) {
+	private static void printRentalAgreement(Scanner sc, RentalInventory inventory, List<Holiday> holidays) {
 		System.out.println("Enter tool code");
 		String toolCode = sc.next();
 		System.out.println("Enter number of rental days");
@@ -75,7 +103,7 @@ public class PointOfSaleApp {
 		System.out.println();
 		try {
 			RentalAgreement agreement = inventory.createRentalAgreement(toolCode, numRentalDays, discountPercent,
-					checkoutDate);
+					checkoutDate, holidays);
 			System.out.println(agreement.printRentalAgreement());
 		} catch (RentalInventoryException e) {
 			System.out.println(e.getMessage());
@@ -87,7 +115,7 @@ public class PointOfSaleApp {
 	 * @param args command line arguments
 	 * @return
 	 */
-	public static CommandLine parseArgs(String[] args) {
+	private static CommandLine parseArgs(String[] args) {
 		Options options = new Options();
 		Option toolsJsonFileName = Option.builder().longOpt(TOOL_JSON_FILE_NAME_OPT).hasArg().required(false)
 				.desc(TOOL_FILE_ARG_DESC).build();
@@ -95,6 +123,9 @@ public class PointOfSaleApp {
 		Option toolTypeJsonFileName = Option.builder().longOpt(TOOL_TYPE_JSON_FILE_NAME_OPT).hasArg().required(false)
 				.desc(TOOL_TYPE_FILE_ARG_DESC).build();
 		options.addOption(toolTypeJsonFileName);
+		Option holidaysJsonFileName = Option.builder().longOpt(HOLIDAYS_JSON_FILE_NAME_OPT).hasArg().required(false)
+				.desc(HOLIDAYS_FILE_ARG_DESC).build();
+		options.addOption(holidaysJsonFileName);
 		CommandLine cmd;
 		CommandLineParser parser = new DefaultParser();
 		HelpFormatter helper = new HelpFormatter();
@@ -113,10 +144,15 @@ public class PointOfSaleApp {
 		if (cmd == null) {
 			System.exit(1);
 		}
+		ObjectMapper mapper = new ObjectMapper();
 		String toolJsonFileName = cmd.getOptionValue(TOOL_JSON_FILE_NAME_OPT, TOOL_FILE_NAME);
 		String toolTypeJsonFileName = cmd.getOptionValue(TOOL_TYPE_JSON_FILE_NAME_OPT, TOOL_TYPES_FILE_NAME);
+		String holidaysJsonFileName = cmd.getOptionValue(HOLIDAYS_JSON_FILE_NAME_OPT, HOLIDAYS_FILE_NAME);
 		RentalInventory inventory = new StoreRentalInventory(new ToolRentalAgreementGenerator());
-		if (!populateStoreInventory(toolJsonFileName, toolTypeJsonFileName, inventory))
+		List<Holiday> holidays = parseHolidaysFromJson(mapper, holidaysJsonFileName);
+		if(holidays == null)
+			System.exit(1);
+		if (!populateStoreInventory(mapper, toolJsonFileName, toolTypeJsonFileName, inventory))
 			System.exit(1);
 		Scanner inputScanner = new Scanner(System.in);
 		boolean keepRunning = true;
@@ -124,7 +160,7 @@ public class PointOfSaleApp {
 			System.out.println(String.format(CHOOSE_STATE_MESSAGE, GENERATE_RENTAL_AGREEMENT_STATE, EXIT_STATE));
 			switch (inputScanner.nextInt()) {
 			case GENERATE_RENTAL_AGREEMENT_STATE:
-				printRentalAgreement(inputScanner, inventory);
+				printRentalAgreement(inputScanner, inventory, holidays);
 				break;
 			case EXIT_STATE:
 				System.out.println("Exiting");

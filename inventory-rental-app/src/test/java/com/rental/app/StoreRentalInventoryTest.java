@@ -1,6 +1,10 @@
 package com.rental.app;
 
+import java.time.DayOfWeek;
+import java.time.Month;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.junit.Before;
@@ -11,7 +15,12 @@ import static org.junit.Assert.assertEquals;
 public class StoreRentalInventoryTest {
 	private StoreRentalInventory storeInventory;
 	private HashMap<String, InventoryItem> storeInventoryMap;
-
+	private List<SpecialDay> specialDays;
+	
+	private void printTestCase(String toolCode, String checkoutDate, String rentalDays, int discount) {
+		
+	}
+	
 	@Before
 	public void setupBefore() throws InvalidInventoryItemException {
 		InventoryItemType ladder = new InventoryItemType("Ladder", 1.99, true, true, false);
@@ -28,11 +37,15 @@ public class StoreRentalInventoryTest {
 		for (Map.Entry<String, InventoryItem> set : storeInventoryMap.entrySet()) {
 			storeInventory.addInventoryItem(set.getKey(), set.getValue());
 		}
+		
+		specialDays = new ArrayList<SpecialDay>();
+		specialDays.add(new Holiday(Month.JULY,4,null,0));
+		specialDays.add(new Holiday(Month.SEPTEMBER,0,DayOfWeek.MONDAY,1));
 	}
 	
 	@Test(expected = DiscountPercentOutOfRangeException.class)
 	public void test1() throws RentalInventoryException {
-		storeInventory.createRentalAgreement("JAKR", 5, 101, "09/03/15");
+		storeInventory.createRentalAgreement("JAKR", 5, 101, "09/03/15", specialDays);
 	}
 	
 	@Test
@@ -51,7 +64,7 @@ public class StoreRentalInventoryTest {
 				item.getType().getName(), item.getBrand(), rentalDays, checkoutDate, dueDate, dailyCharge, chargeDays,
 				preDiscountCharge, discountPercent, discountAmount, finalCharge);
 		ToolRentalAgreement actualRentalAgreement = (ToolRentalAgreement) storeInventory
-				.createRentalAgreement(item.getCode(), rentalDays, discountPercent, checkoutDate);
+				.createRentalAgreement(item.getCode(), rentalDays, discountPercent, checkoutDate, specialDays);
 		assertEquals(expectedRentalAgreement, actualRentalAgreement);
 	}
 	
@@ -71,7 +84,7 @@ public class StoreRentalInventoryTest {
 				item.getType().getName(), item.getBrand(), rentalDays, checkoutDate, dueDate, dailyCharge, chargeDays,
 				preDiscountCharge, discountPercent, discountAmount, finalCharge);
 		ToolRentalAgreement actualRentalAgreement = (ToolRentalAgreement) storeInventory
-				.createRentalAgreement(item.getCode(), rentalDays, discountPercent, checkoutDate);
+				.createRentalAgreement(item.getCode(), rentalDays, discountPercent, checkoutDate, specialDays);
 		assertEquals(expectedRentalAgreement, actualRentalAgreement);
 	}
 	
@@ -91,7 +104,7 @@ public class StoreRentalInventoryTest {
 				item.getType().getName(), item.getBrand(), rentalDays, checkoutDate, dueDate, dailyCharge, chargeDays,
 				preDiscountCharge, discountPercent, discountAmount, finalCharge);
 		ToolRentalAgreement actualRentalAgreement = (ToolRentalAgreement) storeInventory
-				.createRentalAgreement(item.getCode(), rentalDays, discountPercent, checkoutDate);
+				.createRentalAgreement(item.getCode(), rentalDays, discountPercent, checkoutDate, specialDays);
 		assertEquals(expectedRentalAgreement, actualRentalAgreement);
 	}
 	
@@ -111,7 +124,7 @@ public class StoreRentalInventoryTest {
 				item.getType().getName(), item.getBrand(), rentalDays, checkoutDate, dueDate, dailyCharge, chargeDays,
 				preDiscountCharge, discountPercent, discountAmount, finalCharge);
 		ToolRentalAgreement actualRentalAgreement = (ToolRentalAgreement) storeInventory
-				.createRentalAgreement(item.getCode(), rentalDays, discountPercent, checkoutDate);
+				.createRentalAgreement(item.getCode(), rentalDays, discountPercent, checkoutDate, specialDays);
 		assertEquals(expectedRentalAgreement, actualRentalAgreement);
 	}
 	
@@ -131,28 +144,28 @@ public class StoreRentalInventoryTest {
 				item.getType().getName(), item.getBrand(), rentalDays, checkoutDate, dueDate, dailyCharge, chargeDays,
 				preDiscountCharge, discountPercent, discountAmount, finalCharge);
 		ToolRentalAgreement actualRentalAgreement = (ToolRentalAgreement) storeInventory
-				.createRentalAgreement(item.getCode(), rentalDays, discountPercent, checkoutDate);
+				.createRentalAgreement(item.getCode(), rentalDays, discountPercent, checkoutDate, specialDays);
 		assertEquals(expectedRentalAgreement, actualRentalAgreement);
 	}
 	
 	@Test(expected = InvalidRentalDayException.class)
 	public void shouldThrowInvalidRentalDayException() throws RentalInventoryException {
-		storeInventory.createRentalAgreement("JAKR", 0, 10, "09/03/15");
+		storeInventory.createRentalAgreement("JAKR", 0, 10, "09/03/15", specialDays);
 	}
 
 	@Test(expected = InvalidInventoryItemException.class)
 	public void shouldThrowInvalidToolException() throws RentalInventoryException {
 		storeInventory.addInventoryItem("TEST", new InventoryItem("TEST", null, "test"));
-		storeInventory.createRentalAgreement("TEST", 1, 10, "09/03/15");
+		storeInventory.createRentalAgreement("TEST", 1, 10, "09/03/15", specialDays);
 	}
 
 	@Test(expected = ItemDoesNotExistException.class)
 	public void shouldThrowToolDoesNotExistException() throws RentalInventoryException {
-		storeInventory.createRentalAgreement("TEST", 1, 10, "09/03/15");
+		storeInventory.createRentalAgreement("TEST", 1, 10, "09/03/15", specialDays);
 	}
 	
 	@Test(expected = RentalInventoryException.class)
 	public void shouldThrowRentalInventoryExceptionForBadDate() throws RentalInventoryException {
-		storeInventory.createRentalAgreement("JAKR", 0, 10, "09/03/155");
+		storeInventory.createRentalAgreement("JAKR", 0, 10, "09/03/155", specialDays);
 	}
 }
