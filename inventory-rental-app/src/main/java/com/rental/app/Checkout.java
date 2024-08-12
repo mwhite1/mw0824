@@ -132,4 +132,20 @@ public class Checkout {
 				dailyCharge, chargeDays, preDiscountCharge, discountPercent, discountAmount, finalCharge);
 	}
 
+	public RentalInventory getInventory() {
+		return inventory;
+	}
+
+	public void setInventory(RentalInventory inventory) {
+		this.inventory = inventory;
+	}
+
+	public RentalAgreementGenerator getRentalAgreementGenerator() {
+		return rentalAgreementGenerator;
+	}
+
+	public void setRentalAgreementGenerator(RentalAgreementGenerator rentalAgreementGenerator) {
+		this.rentalAgreementGenerator = rentalAgreementGenerator;
+	}
+
 }
