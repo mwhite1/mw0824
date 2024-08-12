@@ -29,10 +29,10 @@ JSON map of types with the tool type as the key.  Each value has the following a
 - holidayCharge: `true` if there is charge to rent on holiday and `false` otherwise.
 #### Holiday
 Contains an array of objects representing holidays.  For each object, all attributes **do not** have to be present
-- month: Month holiday falls on. Possible values are the full names of each month (January,February, etc.)
+- month: Month holiday falls on. Possible values are the full names of each month (JANUARY,FEBRUARY, etc.)
 - dayOfMonth: the day of the month the holiday falls on
-- dayOfWeek: the day of the week the holiday falls on.  Possible values are the full names of each day of the week (monday,tuesday, etc.)
-- dayOfWeekOrdinal: ordinal for the day of the week attribute value.  If value is positive, ordinal is counted from the front and if negative, it is counted from the back
+- dayOfWeek: the day of the week the holiday falls on.  Possible values are the full names of each day of the week (MONDAY,TUESDAY, etc.)
+- dayOfWeekOrdinal: ordinal for the day of the week attribute value.  If value is positive, ordinal is counted from the front of the month and if negative, it is counted from the back of the month. For instance month=MAY, dayOfWeek=MONDAY, and dayOfWeekOrdinal=1 reads as "The first Monday in May".  Whereas if dayOfWeekOrdinal=-1 with all other values being the same, that would read as "The last Monday in May"
 
 Example Holidays:
 - July 4th: `{"month":"JULY","dayOfMonth":4}`
