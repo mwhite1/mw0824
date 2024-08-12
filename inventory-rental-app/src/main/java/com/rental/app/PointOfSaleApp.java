@@ -29,6 +29,7 @@ public class PointOfSaleApp {
 	private static final String TOOL_FILE_NAME = "items.json";
 	private static final String TOOL_TYPES_FILE_NAME = "types.json";
 	private static final String HOLIDAYS_FILE_NAME = "holidays.json";
+	private static final String HELP_OPT = "help";
 	private static final String TOOL_FILE_ARG_DESC = "json file containing tools";
 	private static final String TOOL_TYPE_FILE_ARG_DESC = "json file containing tools";
 	private static final String INVALID_STATE_MESSAGE = "Invalid argument.  Please enter %s or %s";
@@ -37,6 +38,7 @@ public class PointOfSaleApp {
 	private static final String TOOL_TYPE_JSON_FILE_NAME_OPT = "toolTypeJsonFileName";
 	private static final String HOLIDAYS_JSON_FILE_NAME_OPT = "holidaysFileName";
 	private static final String HOLIDAYS_FILE_ARG_DESC = "file containing all eligible holidays";
+	private static final String DATE_FORMAT = "MM/dd/yy";
 	private static final int GENERATE_RENTAL_AGREEMENT_STATE = 1;
 	private static final int EXIT_STATE = 2;
 
@@ -109,7 +111,7 @@ public class PointOfSaleApp {
 		int numRentalDays = sc.nextInt();
 		System.out.println("Enter discount percent");
 		int discountPercent = sc.nextInt();
-		System.out.println("Enter checkout date");
+		System.out.println(String.format("Enter checkout date (%s)",DATE_FORMAT));
 		String checkoutDate = sc.next();
 		System.out.println();
 		try {
@@ -128,6 +130,8 @@ public class PointOfSaleApp {
 	 */
 	private static CommandLine parseArgs(String[] args) {
 		Options options = new Options();
+		Option helpOption = new Option(HELP_OPT.substring(0,1),HELP_OPT,false,"help");
+		options.addOption(helpOption);
 		Option toolsJsonFileName = Option.builder().longOpt(TOOL_JSON_FILE_NAME_OPT).hasArg().required(false)
 				.desc(TOOL_FILE_ARG_DESC).build();
 		options.addOption(toolsJsonFileName);
@@ -142,9 +146,12 @@ public class PointOfSaleApp {
 		HelpFormatter helper = new HelpFormatter();
 		try {
 			cmd = parser.parse(options, args);
+			if(cmd.hasOption(helpOption)) {
+				helper.printHelp("Options", options);
+			}
 		} catch (ParseException e) {
 			System.out.println(e.getMessage());
-			helper.printHelp("Usage:", options);
+			helper.printHelp("Options",options);
 			return null;
 		}
 		return cmd;
@@ -155,6 +162,8 @@ public class PointOfSaleApp {
 		if (cmd == null) {
 			System.exit(1);
 		}
+		if(cmd.hasOption(HELP_OPT))
+			System.exit(0);
 		ObjectMapper mapper = JsonMapper.builder().enable(MapperFeature.ACCEPT_CASE_INSENSITIVE_ENUMS).build();
 		String toolJsonFileName = cmd.getOptionValue(TOOL_JSON_FILE_NAME_OPT, TOOL_FILE_NAME);
 		String toolTypeJsonFileName = cmd.getOptionValue(TOOL_TYPE_JSON_FILE_NAME_OPT, TOOL_TYPES_FILE_NAME);

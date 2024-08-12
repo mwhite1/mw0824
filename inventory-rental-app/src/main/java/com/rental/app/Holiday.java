@@ -4,6 +4,14 @@ import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.Month;
 
+/**
+ * 
+ * Class that contains a holiday.  A holiday can either fall on an exact day of the year
+ * or a day of the week.
+ * 
+ * @author Malcolm White
+ *
+ */
 public class Holiday {
 	protected Month month;
 	protected int dayOfMonth;
@@ -16,7 +24,16 @@ public class Holiday {
 		dayOfWeek = null;
 		dayOfWeekOrdinal = 0;
 	}
-
+	
+	/**
+	 * 
+	 * @param month Month the holiday falls on
+	 * @param dayOfMonth day of the month the holiday falls on
+	 * @param dayOfWeek day of the week the holiday falls on
+	 * @param dayOfWeekOrdinal ordinal representing which dayOfWeek the holiday falls on.
+	 *        For instance, if month is JANUARY, dayOfWeek is MONDAY and dayOfWeekOrdinal is 1,
+	 *        the holiday is the 1st Monday in January.
+	 */
 	public Holiday(Month month, int dayOfMonth, DayOfWeek dayOfWeek, int dayOfWeekOrdinal) {
 		this.month = month;
 		this.dayOfMonth = dayOfMonth;
@@ -24,6 +41,12 @@ public class Holiday {
 		this.dayOfWeekOrdinal = dayOfWeekOrdinal;
 	}
 
+	/**
+	 * Check if date is an ordinal holiday
+	 * 
+	 * @param date date
+	 * @return true if date is ordinal holiday and false otherwise
+	 */
 	protected boolean isOrdinalHoliday(LocalDate date) {
 		if (date.getDayOfWeek() != dayOfWeek || dayOfWeekOrdinal == 0)
 			return false;
@@ -36,6 +59,15 @@ public class Holiday {
 		return date.plusWeeks(-dayOfWeekOrdinal).getMonth() != month;
 	}
 
+	/**
+	 * Checks if the date is a holiday.  If this.month != null and this.dayOfMonth > 0,
+	 * returns whether or not date month equals this.month and 
+	 * date day of the month == this.dayOfMonth.  Otherwise returns result of 
+	 * isOrdinalHoliday
+	 * 
+	 * @param date date
+	 * @return true if date is holiday and false otherwise
+	 */
 	public boolean isDateHoliday(LocalDate date) {
 		if (month != null) {
 			if (date.getMonth() != month)

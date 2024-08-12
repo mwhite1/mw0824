@@ -1,7 +1,7 @@
 package com.rental.app;
 
 /**
- * Exception for unexpected behavior in RentalInventory objects
+ * Exception thrown when checkout date is invalid
  * @author Malcolm White
  *
  */
