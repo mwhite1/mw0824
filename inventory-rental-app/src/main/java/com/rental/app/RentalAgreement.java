@@ -10,7 +10,7 @@ import java.util.Objects;
  *
  */
 public class RentalAgreement{
-	private static final String border = "*************************";
+	private static final String border = "-----------------------";
 
 	protected String toolCode;
 	protected String toolType;
