@@ -1,5 +1,0 @@
-{
-	"ladder":{"name":"Ladder","dailyCharge":1.99,"weekdayCharge":true,"weekendCharge":true,"holidayCharge":false},
-	"chainsaw":{"name":"Chainsaw","dailyCharge":1.49,"weekdayCharge":true,"weekendCharge":false,"holidayCharge":true},
-	"jackhammer":{"name":"Jackhammer","dailyCharge":2.99,"weekdayCharge":true,"weekendCharge":false,"holidayCharge":false}
-}
